@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>セキュリティOXクイズ</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>家族を守れ！セキュリティOXクイズ</h1>
+        <div id="question"></div>
+        <img id="quiz-image" src="" alt="クイズ画像" style="max-width: 80%; display: none; margin: 20px auto;" />
+        <div class="buttons">
+          <button onclick="answer('O')">O</button>
+          <button onclick="answer('X')">X</button>
+        </div>
+        <div id="feedback"></div>
+        <div id="result" style="margin-top: 30px;"></div>
+      </div>
+  <script src="script.js"></script>
+</body>
+</html>
