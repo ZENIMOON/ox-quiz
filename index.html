@@ -2,14 +2,81 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>OXクイズ</title>
-  <link rel="stylesheet" href="style.css">
+  <title>家族を守れ！セキュリティOXクイズ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Helvetica Neue', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+      text-align: center;
+      color: #333;
+    }
+    .quiz-container {
+      max-width: 600px;
+      margin: 50px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      font-size: 1.8em;
+      margin-bottom: 20px;
+      color: #222;
+    }
+    #question {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+    }
+    #quiz-image {
+      width: 100%;
+      max-width: 400px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+    .buttons button {
+      font-size: 1.2em;
+      margin: 10px;
+      padding: 12px 30px;
+      border: none;
+      border-radius: 8px;
+      background-color: #eee;
+      transition: background-color 0.2s, transform 0.2s;
+      cursor: pointer;
+    }
+    .buttons button:hover {
+      background-color: #ddd;
+      transform: scale(1.05);
+    }
+    #feedback {
+      font-weight: bold;
+      font-size: 1.2em;
+      margin: 20px 0;
+      min-height: 40px;
+    }
+    #result {
+      font-size: 1.4em;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+    @media (max-width: 600px) {
+      .quiz-container {
+        margin: 20px;
+        padding: 20px;
+      }
+      #quiz-image {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="quiz-container">
     <h1>家族を守れ！セキュリティOXクイズ</h1>
     <div id="question"></div>
-    <img id="quiz-image" src="" style="max-width: 80%; display: none;" />
+    <img id="quiz-image" src="" style="display: none;" />
     <div class="buttons">
       <button onclick="answer('O')">O</button>
       <button onclick="answer('X')">X</button>
@@ -17,6 +84,93 @@
     <div id="feedback"></div>
     <div id="result"></div>
   </div>
-  <script src="script.js"></script>
+  <script>
+    const quizData = [
+      {
+        question: "無料Wi-Fiは安全なのでパスワードがなくても安心して使える。",
+        correctAnswer: "X",
+        image: "images/q1.png"
+      },
+      {
+        question: "怪しいメールのリンクをクリックしてはいけない。",
+        correctAnswer: "O",
+        image: "images/q2.png"
+      },
+      {
+        question: "ウイルス対策ソフトは最新の状態にしておくべきである。",
+        correctAnswer: "O",
+        image: "images/q3.png"
+      },
+      {
+        question: "ネットにアップした写真は後から完全に削除できる。",
+        correctAnswer: "X",
+        image: "images/q4.png"
+      },
+      {
+        question: "SNSの投稿は全世界の誰でも見られる可能性がある。",
+        correctAnswer: "O",
+        image: "images/q5.png"
+      }
+    ];
+
+    let current = 0;
+    let score = 0;
+
+    function showQuestion() {
+      const q = quizData[current];
+      document.getElementById("question").innerText = `Q${current + 1}: ${q.question}`;
+
+      const img = document.getElementById("quiz-image");
+      if (q.image) {
+        img.src = q.image;
+        img.style.display = "block";
+      } else {
+        img.style.display = "none";
+      }
+
+      document.getElementById("feedback").innerText = "";
+      document.getElementById("result").innerText = "";
+      document.querySelector(".buttons").style.display = "block";
+    }
+
+    function answer(choice) {
+      const isCorrect = choice === quizData[current].correctAnswer;
+      const feedback = document.getElementById("feedback");
+
+      if (isCorrect) {
+        score++;
+        feedback.innerText = "正解！🎉 よく守った！";
+        feedback.style.color = "green";
+      } else {
+        feedback.innerText = "不正解…😢 油断大敵！";
+        feedback.style.color = "red";
+      }
+
+      current++;
+      if (current < quizData.length) {
+        setTimeout(showQuestion, 1500);
+      } else {
+        setTimeout(showResult, 1500);
+      }
+    }
+
+    function showResult() {
+      document.getElementById("question").innerText = "";
+      document.getElementById("quiz-image").style.display = "block";
+      document.querySelector(".buttons").style.display = "none";
+      document.getElementById("feedback").innerText = "";
+
+      const result = document.getElementById("result");
+      if (score === 5) {
+        document.getElementById("quiz-image").src = "images/success.png";
+        result.innerText = "あなたは家族を完全に守りました！セキュリティヒーロー！🛡️";
+      } else {
+        document.getElementById("quiz-image").src = "images/fail.png";
+        result.innerText = `まだ危険がいっぱい…学び直そう！ (${score}/5問 正解)`;
+      }
+    }
+
+    showQuestion();
+  </script>
 </body>
 </html>
