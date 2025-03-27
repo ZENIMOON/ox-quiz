@@ -23,32 +23,39 @@
     }
     h1 {
       font-size: 1.8em;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
       color: #222;
+    }
+    #intro {
+      font-size: 1em;
+      color: #666;
+      margin-bottom: 20px;
     }
     #question {
       font-size: 1.2em;
       margin-bottom: 20px;
     }
     #quiz-image {
+      display: block;
+      margin: 0 auto 20px auto;
       width: 100%;
       max-width: 400px;
       border-radius: 10px;
-      margin-bottom: 20px;
     }
     .buttons button {
-      font-size: 1.2em;
-      margin: 10px;
-      padding: 12px 30px;
+      background: none;
       border: none;
-      border-radius: 8px;
-      background-color: #eee;
-      transition: background-color 0.2s, transform 0.2s;
+      margin: 10px;
+      padding: 0;
       cursor: pointer;
     }
-    .buttons button:hover {
-      background-color: #ddd;
-      transform: scale(1.05);
+    .buttons img {
+      width: 100px;
+      height: 100px;
+      transition: transform 0.2s;
+    }
+    .buttons img:hover {
+      transform: scale(1.1);
     }
     #feedback {
       font-weight: bold;
@@ -87,17 +94,26 @@
       #quiz-image {
         width: 100%;
       }
+      .buttons img {
+        width: 70px;
+        height: 70px;
+      }
     }
   </style>
 </head>
 <body>
   <div class="quiz-container">
     <h1>家族を守れ！セキュリティOXクイズ</h1>
+    <div id="intro">あなたのセキュリティ知識、試してみませんか？</div>
     <div id="question"></div>
     <img id="quiz-image" src="" style="display: none;" />
     <div class="buttons">
-      <button onclick="answer('O')">O</button>
-      <button onclick="answer('X')">X</button>
+      <button onclick="answer('O')">
+        <img src="images/o.png" alt="O">
+      </button>
+      <button onclick="answer('X')">
+        <img src="images/x.png" alt="X">
+      </button>
     </div>
     <div id="feedback"></div>
     <div id="result"></div>
@@ -105,6 +121,8 @@
       <button onclick="restartQuiz()">もう一度挑戦</button>
       <a id="share-button" href="#" target="_blank">結果をシェア</a>
     </div>
+    <audio id="sound-correct" src="sounds/correct.mp3"></audio>
+    <audio id="sound-wrong" src="sounds/wrong.mp3"></audio>
   </div>
   <script>
     const quizData = [
@@ -152,7 +170,8 @@
 
       document.getElementById("feedback").innerText = "";
       document.getElementById("result").innerText = "";
-      document.querySelector(".buttons").style.display = "block";
+      document.querySelector(".buttons").style.display = "flex";
+      document.querySelector(".buttons").style.justifyContent = "center";
       document.getElementById("actions").style.display = "none";
     }
 
@@ -160,13 +179,18 @@
       const isCorrect = choice === quizData[current].correctAnswer;
       const feedback = document.getElementById("feedback");
 
+      const correctSound = document.getElementById("sound-correct");
+      const wrongSound = document.getElementById("sound-wrong");
+
       if (isCorrect) {
         score++;
         feedback.innerText = "正解！🎉 よく守った！";
         feedback.style.color = "green";
+        correctSound.play();
       } else {
         feedback.innerText = "不正解…😢 油断大敵！";
         feedback.style.color = "red";
+        wrongSound.play();
       }
 
       current++;
@@ -195,7 +219,6 @@
         result.innerText = `まだ危険がいっぱい…学び直そう！ (${score}/5問 正解)`;
       }
 
-      // SNSシェアリンク作成
       const tweetText = encodeURIComponent(`私はセキュリティOXクイズで ${score}/5 問 正解！ #セキュリティヒーロー #OXクイズ`);
       const tweetUrl = `https://twitter.com/intent/tweet?text=${tweetText}&url=${encodeURIComponent(location.href)}`;
       share.href = tweetUrl;
@@ -212,3 +235,4 @@
   </script>
 </body>
 </html>
+
