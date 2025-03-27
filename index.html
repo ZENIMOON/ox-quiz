@@ -61,6 +61,24 @@
       font-weight: bold;
       margin-top: 20px;
     }
+    #actions {
+      margin-top: 30px;
+    }
+    #actions button, #actions a {
+      font-size: 1em;
+      padding: 10px 20px;
+      margin: 10px;
+      border: none;
+      border-radius: 8px;
+      background-color: #007bff;
+      color: white;
+      text-decoration: none;
+      display: inline-block;
+      cursor: pointer;
+    }
+    #actions button:hover, #actions a:hover {
+      background-color: #0056b3;
+    }
     @media (max-width: 600px) {
       .quiz-container {
         margin: 20px;
@@ -83,6 +101,10 @@
     </div>
     <div id="feedback"></div>
     <div id="result"></div>
+    <div id="actions" style="display: none;">
+      <button onclick="restartQuiz()">もう一度挑戦</button>
+      <a id="share-button" href="#" target="_blank">結果をシェア</a>
+    </div>
   </div>
   <script>
     const quizData = [
@@ -131,6 +153,7 @@
       document.getElementById("feedback").innerText = "";
       document.getElementById("result").innerText = "";
       document.querySelector(".buttons").style.display = "block";
+      document.getElementById("actions").style.display = "none";
     }
 
     function answer(choice) {
@@ -161,6 +184,9 @@
       document.getElementById("feedback").innerText = "";
 
       const result = document.getElementById("result");
+      const actions = document.getElementById("actions");
+      const share = document.getElementById("share-button");
+
       if (score === 5) {
         document.getElementById("quiz-image").src = "images/success.png";
         result.innerText = "あなたは家族を完全に守りました！セキュリティヒーロー！🛡️";
@@ -168,6 +194,18 @@
         document.getElementById("quiz-image").src = "images/fail.png";
         result.innerText = `まだ危険がいっぱい…学び直そう！ (${score}/5問 正解)`;
       }
+
+      // SNSシェアリンク作成
+      const tweetText = encodeURIComponent(`私はセキュリティOXクイズで ${score}/5 問 正解！ #セキュリティヒーロー #OXクイズ`);
+      const tweetUrl = `https://twitter.com/intent/tweet?text=${tweetText}&url=${encodeURIComponent(location.href)}`;
+      share.href = tweetUrl;
+      actions.style.display = "block";
+    }
+
+    function restartQuiz() {
+      current = 0;
+      score = 0;
+      showQuestion();
     }
 
     showQuestion();
