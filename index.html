@@ -234,5 +234,13 @@
     showQuestion();
   </script>
 </body>
+<script>
+  const PASSWORD = "kamiyagura2025";
+  const input = prompt("このページを見るにはパスワードを入力してください：");
+  if (input !== PASSWORD) {
+    alert("パスワードが違います。ページを閉じます。");
+    window.location.href = "https://google.com"; // または window.close();
+  }
+</script>
 </html>
 
